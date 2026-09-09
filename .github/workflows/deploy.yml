@@ -1,0 +1,22 @@
+name: Import portfolio source
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Expand the reviewed source archive
+        if: hashFiles('portfolio-source.zip') != ''
+        run: |
+          unzip -o portfolio-source.zip
+          rm portfolio-source.zip
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Import complete portfolio source and beginner guides'
+          git push
